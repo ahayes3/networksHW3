@@ -14,41 +14,44 @@ class JoinScreen(app:DrawingApp) : Screen {
 	val list = List<String>(app.skin)
 	val scrollPane = ScrollPane(list)
 	init {
-		scrollPane.setSize(stage.width/2,50f)
-		list.setSize(stage.width/2,150f)
-		scrollPane.setPosition(100f,100f)
+		Gdx.input.inputProcessor = stage
+		reposition()
+		
+		list.items.distinct()
+		scrollPane.setSmoothScrolling(false)
+		
 		stage.addActor(scrollPane)
 	}
 	
-	override fun hide() {
-		TODO("Not yet implemented")
-	}
+	override fun hide() {}
 	
 	override fun show() {
-		TODO("Not yet implemented")
+		reposition()
 	}
 	
 	override fun render(delta: Float) {
 		Gdx.gl.glClearColor(1f,1f,1f,1f)
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-		
+		stage.act(delta)
+		stage.draw()
 		
 	}
 	
-	override fun pause() {
-		TODO("Not yet implemented")
-	}
+	override fun pause() {}
 	
-	override fun resume() {
-		TODO("Not yet implemented")
-	}
+	override fun resume() {}
 	
 	override fun resize(width: Int, height: Int) {
-		TODO("Not yet implemented")
+		reposition()
 	}
 	
 	override fun dispose() {
-		TODO("Not yet implemented")
+		stage.dispose()
 	}
-	
+	fun reposition() {
+		list.setSize(stage.width/2,100000f)
+		scrollPane.setSize(stage.width/2,stage.height/2)
+		scrollPane.setPosition(stage.width/2 - scrollPane.width/2,stage.height - 10 - scrollPane.height)
+		scrollPane.setBounds(scrollPane.x,scrollPane.y,scrollPane.width,scrollPane.height)
+	}
 }

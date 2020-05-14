@@ -23,7 +23,7 @@ class MainMenu(app: DrawingApp) : Screen {
 		join.addListener(object:ClickListener() {
 			override fun clicked(event: InputEvent?, x: Float, y: Float) {
 				app.screen.dispose()
-				app.screen = JoinScreen()
+				app.screen = JoinScreen(app)
 			}
 		})
 		exit.addListener(object:InputListener() {
@@ -76,6 +76,8 @@ class MainMenu(app: DrawingApp) : Screen {
 		exit.setSize(stage.width / 5, stage.height / 10)
 		create.setPosition(stage.width / 2 - create.width / 2, stage.height - stage.height / 10)
 		create.setSize(stage.width / 5, stage.height / 10)
+		join.setSize(stage.width/5,stage.height/10)
+		join.setPosition(create.x,create.y - join.height)
 	}
 	
 }

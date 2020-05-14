@@ -134,7 +134,7 @@ class CreateMenu(val app:DrawingApp):Screen {
 	
 	private fun create() {
 		this.dispose()
-		app.screen = Canvas(app,resX.text.toInt(),resY.text.toInt())
+		app.screen = Canvas(app,resX.text.toInt(),resY.text.toInt(),true)
 	}
 	
 	private fun recenter() {

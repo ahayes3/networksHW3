@@ -12,7 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import kotlin.system.exitProcess
 
-class Canvas(val app: DrawingApp, resX: Int, resY: Int) : Screen {
+class Canvas(val app: DrawingApp, resX: Int, resY: Int,host:Boolean) : Screen {
+	private val connection:ConnectionManager
 	private val batch = app.batch
 	private val clearColor = Color.GRAY
 	val pixmap = Pixmap(resX, resY, Pixmap.Format.RGB888)
@@ -31,14 +32,18 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int) : Screen {
 		}
 	var color:Color = Color.BLACK
 	/*todo
-	1. create invite and join
-	2. create thread for packet handling
+	1. create invite and join //done
+	2. create thread for packet handling //in progress
 	3. create packets for difference created in canvas
 	4. ???
 	5. profit
 	 */
 	
 	init {
+		if(host)
+			connection = Host(this)
+		else
+			connection = Client(this)
 		Gdx.input.inputProcessor = multiplexer
 		
 		camera.setToOrtho(false, Gdx.graphics.displayMode.width.toFloat(), Gdx.graphics.displayMode.height.toFloat())
@@ -115,6 +120,7 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int) : Screen {
 	
 	override fun dispose() {
 		pixmap.dispose()
+		connection.end()
 	}
 	
 	fun reposition() {
