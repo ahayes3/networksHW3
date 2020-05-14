@@ -15,9 +15,17 @@ class MainMenu(app: DrawingApp) : Screen {
 	private val stage = Stage(ScreenViewport())
 	val exit = TextButton("Exit", app.skin)
 	val create = TextButton("Create",app.skin)
+	val join = TextButton("Join",app.skin)
 	init {
 		Gdx.input.inputProcessor = stage
 		recenter()
+		
+		join.addListener(object:ClickListener() {
+			override fun clicked(event: InputEvent?, x: Float, y: Float) {
+				app.screen.dispose()
+				app.screen = JoinScreen()
+			}
+		})
 		exit.addListener(object:InputListener() {
 			override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
 				app.dispose()
@@ -32,6 +40,7 @@ class MainMenu(app: DrawingApp) : Screen {
 			}
 		})
 		
+		stage.addActor(join)
 		stage.addActor(exit)
 		stage.addActor(create)
 	}

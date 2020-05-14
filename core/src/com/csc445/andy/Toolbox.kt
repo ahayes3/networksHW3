@@ -13,14 +13,23 @@ import com.badlogic.gdx.utils.Align
 class Toolbox(val skin: Skin,val canvas: Canvas) {
 	var x:Float =0F
 	var y:Float =0F
+	val file = TextButton("File",skin)
 	val table = Table(skin)
 	val colorTable = Table(skin)
 	val pencil = Pencil(canvas)
 	val eraser = Eraser(canvas)
 	val bucket = Bucket(canvas)
+	val fileTable = Table(skin)
 	
 	
 	init {
+		file.addListener(object:ClickListener() {
+			override fun clicked(event: InputEvent?, x: Float, y: Float) {
+				fileTable.isVisible = !fileTable.isVisible
+			}
+		})
+		canvas.stage.addActor(file)
+		
 		val pencilDrawable = TextureRegionDrawable(Texture("pencil.png"))
 		pencilDrawable.setMinSize(30f,30f)
 		val eraserDrawable  = TextureRegionDrawable(Texture("eraser.png"))
@@ -103,19 +112,41 @@ class Toolbox(val skin: Skin,val canvas: Canvas) {
 		colorTable.align(Align.top)
 		//colorTable.debug()
 		canvas.stage.addActor(colorTable)
+		
+		var button = fileTable.add(TextButton("invite",skin))
+		button.actor.addListener(object:ClickListener() {
+			override fun clicked(event: InputEvent?, x: Float, y: Float) {
+				//todo
+			}
+		})
+		fileTable.row()
+		button = fileTable.add(TextButton("exit",skin))
+		button.actor.addListener(object:ClickListener() {
+			override fun clicked(event: InputEvent?, x: Float, y: Float) {
+				canvas.exit()
+			}
+		})
+		
+		canvas.stage.addActor(fileTable)
 	}
 	
 	fun reposition() {
+		file.scaleBy(1f,.2f)
+		file.setSize(60f,20f)
+		file.setPosition(0f,canvas.stage.height - file.height - 2)
+		fileTable.setSize(60f,60f)
+		fileTable.setPosition(0f,file.y - fileTable.height)
+		
 		table.setSize(60f,60f)
-		table.setPosition(0f,canvas.stage.height - table.height)
+		table.setPosition(canvas.stage.width - table.width,canvas.stage.height - table.height)
 		val background = Pixmap(table.width.toInt(),table.height.toInt(),Pixmap.Format.RGB888)
 		background.setColor(Color.LIGHT_GRAY)
 		background.fill()
 		table.background = TextureRegionDrawable(Texture(background))
 		background.dispose()
-		
 		colorTable.setSize(60f,120f)
-		colorTable.setPosition(0f,table.y-colorTable.height)
+		colorTable.setPosition(canvas.stage.width - colorTable.width,table.y-colorTable.height)
+		
 		
 	}
 	

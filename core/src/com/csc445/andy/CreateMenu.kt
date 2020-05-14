@@ -27,7 +27,15 @@ class CreateMenu(val app:DrawingApp):Screen {
 	private val resY:TextField = TextField("100",app.skin)
 	private val create:TextButton = TextButton("Create",app.skin)
 	private val label: Label = Label("Set resolutions correctly",app.skin)
+	private val back:TextButton = TextButton("Back",app.skin)
 	init {
+		
+		back.addListener(object:ClickListener() {
+			override fun clicked(event: InputEvent?, x: Float, y: Float) {
+				dispose()
+				app.screen = MainMenu(app)
+			}
+		})
 		
 		label.color = Color(1F,0F,0F,0F)
 		Gdx.input.inputProcessor = stage
@@ -96,6 +104,7 @@ class CreateMenu(val app:DrawingApp):Screen {
 		stage.addActor(label)
 		stage.addActor(create)
 		stage.addActor(table)
+		stage.addActor(back)
 	}
 	override fun hide() {}
 	
@@ -142,6 +151,9 @@ class CreateMenu(val app:DrawingApp):Screen {
 		
 		create.setSize(stage.width/5,stage.height/10)
 		create.setPosition(stage.width -create.width,0F)
+		
+		back.setSize(stage.width/5,stage.height/10)
+		back.setPosition(0f,0f)
 	}
 	
 }

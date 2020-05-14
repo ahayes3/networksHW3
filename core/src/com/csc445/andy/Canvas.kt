@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Slider
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import kotlin.system.exitProcess
 
 class Canvas(val app: DrawingApp, resX: Int, resY: Int) : Screen {
 	private val batch = app.batch
@@ -94,7 +95,7 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int) : Screen {
 		batch.end()
 		sr.begin(ShapeRenderer.ShapeType.Filled)
 		sr.color = color
-		sr.rect(0f,toolbox.colorTable.y - 11,60f,10f)
+		sr.rect(toolbox.colorTable.x,toolbox.colorTable.y - 11,60f,10f)
 		sr.end()
 		
 		stage.draw()
@@ -119,5 +120,9 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int) : Screen {
 	fun reposition() {
 		toolbox.reposition()
 	}
-	
+	fun exit() {
+		dispose()
+		app.dispose()
+		exitProcess(0)
+	}
 }
