@@ -9,23 +9,31 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 
 class Canvas(val app:DrawingApp,val resX:Int,val resY:Int): Screen {
 	private val batch = app.batch
-	private val clearColor = Color.LIGHT_GRAY
+	private val clearColor = Color.GRAY
 	val pixmap = Pixmap(resX,resY,Pixmap.Format.RGB888)
 	val camera = OrthographicCamera()
 	val multiplexer = InputMultiplexer()
-	private val stage = Stage(ScreenViewport())
+	val stage:Stage
 	private var texture:Texture
+	private val toolbox:Toolbox
+	var tool:Tool
+	
+	
 	init {
-		multiplexer.addProcessor(CommonInput(this))
-		
-		
-		Gdx.input.inputProcessor = CommonInput(this)
+		Gdx.input.inputProcessor = multiplexer
 		camera.setToOrtho(false, Gdx.graphics.displayMode.width.toFloat(), Gdx.graphics.displayMode.height.toFloat())
+		stage = Stage(ScreenViewport())
 		pixmap.setColor(Color.WHITE)
 		pixmap.fill()
 		texture = Texture(pixmap)
 		camera.position.x = texture.width/2F
 		camera.position.y = texture.height/2F
+		toolbox = Toolbox(app.skin, this)
+		tool = toolbox.pencil
+		
+		multiplexer.addProcessor(stage)
+		multiplexer.addProcessor(CommonInput(this))
+		multiplexer.addProcessor(0,tool)
 	}
 	override fun hide() {}
 	
@@ -34,17 +42,21 @@ class Canvas(val app:DrawingApp,val resX:Int,val resY:Int): Screen {
 	}
 	
 	override fun render(delta: Float) {
-		
 		//drawing
 		Gdx.gl.glClearColor(clearColor.r,clearColor.g,clearColor.b,clearColor.a)
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 		batch.projectionMatrix = camera.combined
+		
+		stage.act(delta)
+		stage.draw()
 		
 		texture = Texture(pixmap)
 		batch.begin()
 		texture.draw(pixmap,0,0)
 		batch.draw(texture,0F,0F)
 		batch.end()
+		
+		
 		
 		camera.update()
 		
@@ -65,7 +77,7 @@ class Canvas(val app:DrawingApp,val resX:Int,val resY:Int): Screen {
 	}
 	
 	fun reposition() {
-	
+		toolbox.reposition()
 	}
 	
 }

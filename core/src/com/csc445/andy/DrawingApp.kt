@@ -14,7 +14,7 @@ class DrawingApp : Game() {
     override fun create() {
         batch = SpriteBatch()
         font = BitmapFont()
-        skin = Skin(Gdx.files.internal("default/skin/uiskin.json"))
+        skin = Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"))
         this.setScreen(MainMenu(this))
     }
 

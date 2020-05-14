@@ -5,22 +5,30 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 
 class CreateMenu(val app:DrawingApp):Screen {
 	private val stage:Stage = Stage(ScreenViewport())
-	private val resX:TextField = TextField("Resolution X",app.skin)
-	private val resY:TextField = TextField("Resolution Y",app.skin)
+	//todo switch names from default
+	private val table = Table(app.skin)
+	private val resX:TextField = TextField("100",app.skin)
+	private val resY:TextField = TextField("100",app.skin)
 	private val create:TextButton = TextButton("Create",app.skin)
 	private val label: Label = Label("Set resolutions correctly",app.skin)
 	init {
+		
 		label.color = Color(1F,0F,0F,0F)
 		Gdx.input.inputProcessor = stage
 		resX.addListener(object:InputListener() {
@@ -72,12 +80,22 @@ class CreateMenu(val app:DrawingApp):Screen {
 				return true
 			}
 		})
-		
 		recenter()
+		val background = Pixmap(table.width.toInt(),table.height.toInt(),Pixmap.Format.RGBA8888)
+		background.setColor(Color.LIGHT_GRAY)
+		background.fill()
+		table.background = TextureRegionDrawable(Texture(background))
+		background.dispose()
+		table.add(Label("X resolution",app.skin))
+		//table.add(Label("X resolution",app.skin))
+		table.add(resX)
+		table.row()
+		table.add(Label("Y resolution",app.skin))
+		table.add(resY)
+		
 		stage.addActor(label)
 		stage.addActor(create)
-		stage.addActor(resX)
-		stage.addActor(resY)
+		stage.addActor(table)
 	}
 	override fun hide() {}
 	
@@ -112,13 +130,15 @@ class CreateMenu(val app:DrawingApp):Screen {
 	
 	private fun recenter() {
 		label.setSize(stage.width/3,stage.height/10)
-		label.setPosition(stage.width/2 - label.width/2,stage.height *(9/10))
+		label.setPosition(stage.width/2 - label.width/2,stage.height *(9/10F) - label.height)
 		
-		resX.setSize(stage.width / 1.5F, stage.height / 10)
-		resX.setPosition(stage.width / 2 - resX.width / 2, stage.height - 2*stage.height / 10)
-		
-		resY.setSize(stage.width / 1.5F, stage.height / 10)
-		resY.setPosition(stage.width / 2 - resY.width / 2, stage.height - 3*stage.height / 10)
+		table.setSize(stage.width/2,stage.height/5)
+		table.setPosition(stage.width/2F - table.width/2F,(stage.height * (8/10F)) - table.height)
+//		resX.setSize(stage.width / 1.5F, stage.height / 10)
+//		resX.setPosition(stage.width / 2 - resX.width / 2, stage.height - 2*stage.height / 10)
+//
+//		resY.setSize(stage.width / 1.5F, stage.height / 10)
+//		resY.setPosition(stage.width / 2 - resY.width / 2, stage.height - 3*stage.height / 10)
 		
 		create.setSize(stage.width/5,stage.height/10)
 		create.setPosition(stage.width -create.width,0F)

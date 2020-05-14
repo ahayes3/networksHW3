@@ -13,7 +13,6 @@ class CommonInput(val canvas:Canvas) : InputProcessor {
 			val unprojected = canvas.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0F))
 			canvas.camera.position.x -= unprojected.x
 			canvas.camera.position.y -= unprojected.y
-			
 		}
 		return false
 	}
@@ -23,7 +22,7 @@ class CommonInput(val canvas:Canvas) : InputProcessor {
 	}
 	
 	override fun scrolled(amount: Int): Boolean {
-		canvas.camera.zoom += amount*3*Gdx.graphics.getDeltaTime();
+		canvas.camera.zoom += amount*3*Gdx.graphics.deltaTime;
 		if(canvas.camera.zoom <0.05)
 			canvas.camera.zoom = 0.05f;
 		return true
