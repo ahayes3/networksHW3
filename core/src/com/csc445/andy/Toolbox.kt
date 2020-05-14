@@ -100,12 +100,6 @@ class Toolbox(val skin: Skin,val canvas: Canvas) {
 		slider.actor.color = Color(0f,0f,1f,.5f)
 		slider.minWidth(60f)
 		slider.minHeight(10f)
-		val pixmap = Pixmap(64,64,Pixmap.Format.RGBA8888)
-		pixmap.setColor(Color.WHITE)
-		pixmap.fill()
-		pixmap.blending = Pixmap.Blending.None
-		colorTable.add(Image(Texture(pixmap))).fill()
-		pixmap.dispose()
 		colorTable.align(Align.top)
 		//colorTable.debug()
 		canvas.stage.addActor(colorTable)
