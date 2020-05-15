@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
 abstract class Tool(val canvas: Canvas,var size:Int) : InputProcessor {
+	var strokeSet = mutableSetOf<Coord>()
+	var strokeDone = false
+	
 	abstract fun render(batch: SpriteBatch)
 	override fun scrolled(amount: Int): Boolean {
 		return false

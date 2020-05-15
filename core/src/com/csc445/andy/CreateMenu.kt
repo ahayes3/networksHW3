@@ -46,11 +46,16 @@ class CreateMenu(val app:DrawingApp):Screen {
 			}
 			
 			override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
-				if(keycode == Input.Keys.ENTER && resX.text.matches(Regex("\\d+")))
+				if(keycode == Input.Keys.ENTER && resX.text.matches(Regex("\\d+"))) {
+					if(resY.text.toInt() >Short.MAX_VALUE)
+						resY.text = Short.MAX_VALUE.toString()
 					stage.keyboardFocus = null
+				}
 				else if(keycode == Input.Keys.ENTER && resX.text.matches(Regex("-\\d+"))) {
 					stage.keyboardFocus = null
 					resX.text = resX.text.substring(1 until resX.text.length)
+					if(resY.text.toInt() >Short.MAX_VALUE)
+						resY.text = Short.MAX_VALUE.toString()
 				}
 				else if(keycode == Input.Keys.ENTER) {
 					stage.keyboardFocus = null
@@ -66,12 +71,18 @@ class CreateMenu(val app:DrawingApp):Screen {
 			}
 			
 			override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
-				if(keycode == Input.Keys.ENTER && resY.text.matches(Regex("\\d+")))
+				if(keycode == Input.Keys.ENTER && resY.text.matches(Regex("\\d+"))) {
+					if(resY.text.toInt() >Short.MAX_VALUE)
+						resY.text = Short.MAX_VALUE.toString()
 					stage.keyboardFocus = null
+				}
 				else if(keycode == Input.Keys.ENTER && resY.text.matches(Regex("-\\d+"))) {
 					stage.keyboardFocus = null
 					resY.text = resY.text.substring(1 until resY.text.length)
+					if(resY.text.toInt() >Short.MAX_VALUE)
+						resY.text = Short.MAX_VALUE.toString()
 				}
+				
 				else if(keycode == Input.Keys.ENTER) {
 					stage.keyboardFocus = null
 					resY.text = "invalid"

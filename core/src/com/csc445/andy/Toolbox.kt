@@ -81,7 +81,7 @@ class Toolbox(val skin: Skin,val canvas: Canvas) {
 		label.minWidth(30f)
 		label.maxWidth(60f)
 		colorTable.row()
-		var slider = colorTable.add(Slider(1f,1000f,1f,false,skin))
+		var slider = colorTable.add(Slider(1f,100f,1f,false,skin))
 		slider.minWidth( 60f)
 		slider.minHeight(10f)
 		colorTable.row()

@@ -16,6 +16,7 @@ class Pencil(canvas:Canvas,size:Int) : Tool(canvas,size) {
 		if(button == Input.Buttons.LEFT) {
 			mouseDown = false
 			lastPos = null
+			strokeDone = true
 		}
 		return false
 	}
@@ -49,6 +50,8 @@ class Pencil(canvas:Canvas,size:Int) : Tool(canvas,size) {
 	
 	override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
 		if(button == Input.Buttons.LEFT) {
+			strokeDone = false
+			strokeSet.clear()
 			mouseDown = true
 			lastPos = mousePos(screenX.toFloat(),screenY.toFloat())
 			singlePaint(lastPos!!)

@@ -14,6 +14,9 @@ import kotlin.system.exitProcess
 
 class Canvas(val app: DrawingApp, resX: Int, resY: Int,host:Boolean) : Screen {
 	private val connection:ConnectionManager
+	private val thread:Thread
+	var strokeNum = 0
+	
 	private val batch = app.batch
 	private val clearColor = Color.GRAY
 	val pixmap = Pixmap(resX, resY, Pixmap.Format.RGB888)
@@ -40,26 +43,39 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int,host:Boolean) : Screen {
 	 */
 	
 	init {
-		if(host)
+		camera.setToOrtho(false, Gdx.graphics.displayMode.width.toFloat(), Gdx.graphics.displayMode.height.toFloat())
+		if(host) {
 			connection = Host(this)
-		else
-			connection = Client(this)
+			thread = Thread(connection)
+			thread.start()
+			
+			pixmap.setColor(Color.WHITE)
+			pixmap.fill()
+			pixmap.blending = Pixmap.Blending.None
+			texture = TextureRegion(Texture(pixmap))
+			texture.flip(false, true)
+			
+			camera.position.x = texture.regionWidth / 2F
+			camera.position.y = texture.regionHeight / 2F
+		}
+		else {
+			val client = Client(this)
+			connection = client
+			thread = Thread(connection)
+			client.catchUp()
+			
+			
+			
+			//todo catch clients up
+		}
 		Gdx.input.inputProcessor = multiplexer
 		
-		camera.setToOrtho(false, Gdx.graphics.displayMode.width.toFloat(), Gdx.graphics.displayMode.height.toFloat())
 		
-		pixmap.setColor(Color.WHITE)
-		pixmap.fill()
-		pixmap.blending = Pixmap.Blending.None
-		texture = TextureRegion(Texture(pixmap))
-		texture.flip(false, true)
-		
-		camera.position.x = texture.regionWidth / 2F
-		camera.position.y = texture.regionHeight / 2F
 		
 		multiplexer.addProcessor(stage)
 		multiplexer.addProcessor(CommonInput(this))
 		multiplexer.addProcessor(tool)
+		
 	}
 	
 	override fun hide() {}
@@ -83,7 +99,10 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int,host:Boolean) : Screen {
 		(toolbox.colorTable.cells[4].actor as Label).setText("G: $g")
 		(toolbox.colorTable.cells[6].actor as Label).setText("B: $b")
 		
-		
+		if(tool.strokeDone && tool.strokeSet.isNotEmpty()) {
+			connection.giveStroke(tool.strokeSet)
+			tool.strokeSet = mutableSetOf()
+		}
 		//drawing
 		Gdx.gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a)
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -127,7 +146,6 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int,host:Boolean) : Screen {
 		toolbox.reposition()
 	}
 	fun exit() {
-		dispose()
 		app.dispose()
 		exitProcess(0)
 	}

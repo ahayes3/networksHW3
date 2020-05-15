@@ -16,6 +16,7 @@ class Eraser(canvas:Canvas,size:Int) : Tool(canvas,size) {
 	override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
 		if(button == Input.Buttons.LEFT) {
 			mouseDown = false
+			strokeDone = true
 			lastPos = null
 		}
 		return false
@@ -25,13 +26,12 @@ class Eraser(canvas:Canvas,size:Int) : Tool(canvas,size) {
 		return false
 	}
 	
-	fun paint(vec:Vector2) {
+	private fun paint(vec:Vector2) {
 		canvas.pixmap.setColor(Color.WHITE)
-		canvas.pixmap.fillCircle(vec.x.toInt(),vec.y.toInt(),size)
-	}
-	fun singlePaint(vec:Vector2) {
-		canvas.pixmap.setColor(Color.WHITE)
-		canvas.pixmap.fillCircle(vec.x.toInt(),vec.y.toInt(),size)
+		val x = vec.x.toInt()
+		val y = vec.y.toInt()
+		canvas.pixmap.fillCircle(x,y,size)
+		strokeSet.add(Coord(x,y))
 	}
 	
 	override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
@@ -53,9 +53,11 @@ class Eraser(canvas:Canvas,size:Int) : Tool(canvas,size) {
 	
 	override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
 		if(button == Input.Buttons.LEFT) {
+			strokeSet.clear()
+			strokeDone = false
 			mouseDown = true
 			lastPos = mousePos(screenX.toFloat(),screenY.toFloat())
-			singlePaint(lastPos!!)
+			paint(lastPos!!)
 		}
 		return false
 	}
