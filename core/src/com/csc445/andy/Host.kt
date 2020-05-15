@@ -3,6 +3,7 @@ package com.csc445.andy
 import java.net.*
 import java.nio.ByteBuffer
 import java.nio.channels.DatagramChannel
+import kotlin.random.Random
 
 class Host(canvas:Canvas) : ConnectionManager(canvas) {
 	val group = Inet4Address.getByName("224.0.0.1")
@@ -12,6 +13,7 @@ class Host(canvas:Canvas) : ConnectionManager(canvas) {
 			.setOption(StandardSocketOptions.SO_REUSEADDR,true)
 			.bind(InetSocketAddress(group,8080))
 			.setOption(StandardSocketOptions.IP_MULTICAST_IF,ni)
+	val id = Random.nextLong()
 	init {
 		channel.configureBlocking(false)
 		channel.join(group,ni)

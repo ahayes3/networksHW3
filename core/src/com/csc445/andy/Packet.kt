@@ -1,5 +1,6 @@
 package com.csc445.andy
 
+import com.badlogic.gdx.graphics.Pixmap
 import java.nio.ByteBuffer
 
 object Packet {
@@ -15,10 +16,25 @@ object Packet {
 		buff.flip()
 		return buff
 	}
-	fun mustard(strokeNum:Int):ByteBuffer { //you ask for ketchup and get mustard. its as disappointing as this project
-		val buff = ByteBuffer.allocate(6)
+	fun mustard(strokeNum:Int,id:Long):ByteBuffer { //you ask for ketchup and get mustard. its as disappointing as this project
+		val buff = ByteBuffer.allocate(14)
 		buff.putShort(2)
 		buff.putInt(strokeNum)
+		buff.putLong(id)
+		buff.flip()
+		return buff
+	}
+	fun idReq(id:Long):ByteBuffer {
+		val buff = ByteBuffer.allocate(10)
+		buff.putShort(3)
+		buff.putLong(id)
+		buff.flip()
+		return buff
+	}
+	fun allPixel(pixmap: Pixmap):ByteBuffer {
+		val buff = ByteBuffer.allocate(pixmap.pixels.capacity() + 2)
+		buff.putShort(4)
+		buff.put(pixmap.pixels)
 		buff.flip()
 		return buff
 	}
@@ -30,10 +46,11 @@ packet format:
 opcodes
 1 = catchup
 2 = catchup response discard if strokenum <= to yours contains strokenum
-4 = draw
+3 = idrewq
+5 = draw
 
 
-draw: this is no longer correct
+draw: this is no longer correct now its opcode, strokenum, brushsize, x1,y1,...,xn,yn  maybe it gets split into multiple packets if it does then just give it the same strokenum probably
 opcode:Short = 4
 timeStamp:Float
 int:Color  i know it wastes 1 byte

@@ -40,6 +40,7 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int,host:Boolean) : Screen {
 	3. create packets for difference created in canvas
 	4. ???
 	5. profit
+	1.5 redo the joining/inviting maybe,, maybe not
 	 */
 	
 	init {
@@ -63,7 +64,7 @@ class Canvas(val app: DrawingApp, resX: Int, resY: Int,host:Boolean) : Screen {
 			connection = client
 			thread = Thread(connection)
 			client.catchUp()
-			
+			client.caughtUpPixmap()
 			
 			
 			//todo catch clients up
